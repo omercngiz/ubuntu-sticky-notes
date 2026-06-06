@@ -8,6 +8,9 @@ for handling UI, events, actions, and text formatting to keep the code modular.
 import gi
 from gi.repository import Gtk, Gdk, GLib, Adw
 
+from config.colors import DEFAULT_COLOR, COLOR_TEXT_PRIMARY, \
+    COLOR_HEADER_BG, COLOR_FORMAT_BAR_BG, COLOR_PIN_BORDER
+
 from .sticky_formatting import StickyFormatting
 from .sticky_actions import StickyActions
 from .sticky_ui import StickyUI
@@ -42,7 +45,7 @@ class StickyWindow(Adw.Window, StickyFormatting, StickyActions, StickyUI, Sticky
         self._loading = True
         self._is_destroying = False
         self.scale = 1.0
-        self.current_color = "#FFF59D"
+        self.current_color = DEFAULT_COLOR
         self.default_font_size = 12
         
         # --- Load Geometry ---
@@ -131,8 +134,7 @@ class StickyWindow(Adw.Window, StickyFormatting, StickyActions, StickyUI, Sticky
         if hex_color:
             self.current_color = hex_color.strip()
         
-        bg_color = self.current_color or "#FFF59D"
-        
+        bg_color = self.current_color or DEFAULT_COLOR
         # --- Update Main Note Body ---
         for c in self.main_box.get_css_classes():
             if c.startswith("note-color-"):
@@ -149,11 +151,11 @@ class StickyWindow(Adw.Window, StickyFormatting, StickyActions, StickyUI, Sticky
             border-radius: 12px;
         }}
         .sticky-window textview {{
-            color: #000000;
-            caret-color: #000000;
+            color: {COLOR_TEXT_PRIMARY};
+            caret-color: {COLOR_TEXT_PRIMARY};
         }}
         .sticky-window textview text {{
-            color: #000000;
+            color: {COLOR_TEXT_PRIMARY};
         }}
         .sticky-window .compact-header button, 
         .sticky-window .compact-format-bar button {{

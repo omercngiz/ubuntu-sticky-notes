@@ -3,6 +3,8 @@ import html as html_lib
 from gi.repository import Gtk, Pango
 import builtins
 
+from config.colors import DEFAULT_COLOR
+
 _ = builtins._
 
 class NoteCard(Gtk.Box):
@@ -181,7 +183,7 @@ class NoteCard(Gtk.Box):
         Args:
             hex_color (str): The new hexadecimal color string.
         """
-        if not hex_color: hex_color = "#FFF59D"
+        if not hex_color: hex_color = DEFAULT_COLOR
         provider = Gtk.CssProvider()
         css = f"""
         .sticky-paper-card {{ 

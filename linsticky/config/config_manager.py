@@ -9,6 +9,11 @@ Snap packages.
 import os
 import json
 
+from .colors import (
+    PALETTE_COLORS, TEXT_COLORS, FONT_SIZES, 
+    DEFAULT_COLOR
+)
+
 # --- Configuration Path Setup ---
 # Compatibility Note:
 # This logic determines where the `config.json` file is stored.
@@ -56,13 +61,9 @@ class ConfigManager:
             "db_path": db_path,
             "ui_scale": 1.0,
             "language": "en",
-            "palette": ['#FFF59D', '#F8BBD0', '#C8E6C9', '#B3E5FC'],
-            "text_colors": [
-                '#000000', '#424242', '#D32F2F', '#C2185B', '#7B1FA2', '#303F9F',
-                '#1976D2', '#0288D1', '#0097A7', '#00796B', '#388E3C', '#689F38',
-                '#AFB42B', '#FBC02D', '#FFA000', '#E64A19'
-            ],
-            "font_sizes": [8, 10, 12, 14, 16, 18, 20, 24, 32, 48, 72],
+            "palette": PALETTE_COLORS,  # colors.py'dan
+            "text_colors": TEXT_COLORS,  # colors.py'dan
+            "font_sizes": FONT_SIZES,    # colors.py'dan
             "formatting": {
                 "bold": True, "italic": True, "underline": True,
                 "strikethrough": True, "list": True, "text_color": True,

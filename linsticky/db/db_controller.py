@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 from config.config import get_app_paths
 from config.config_manager import ConfigManager
+from config.colors import DEFAULT_COLOR
 
 
 class NotesDB:
@@ -31,25 +32,24 @@ class NotesDB:
         Creates necessary tables and performs schema migrations if needed.
         """
         with self.conn:
-            self.conn.execute("""
-                              CREATE TABLE IF NOT EXISTS notes
-                              (
-                                  id INTEGER PRIMARY KEY,
-                                  title TEXT,
-                                  content TEXT,
-                                  x INTEGER DEFAULT 0,
-                                  y INTEGER DEFAULT 0,
-                                  w INTEGER DEFAULT 300,
-                                  h INTEGER DEFAULT 300,
-                                  color TEXT DEFAULT '#FFF59D',
-                                  deleted INTEGER DEFAULT 0,
-                                  deleted_at TEXT,
-                                  always_on_top INTEGER DEFAULT 0,
-                                  is_open INTEGER DEFAULT 0,
-                                  is_pinned INTEGER DEFAULT 0
-                              )
-                              """)
-
+            self.conn.execute(f"""
+                CREATE TABLE IF NOT EXISTS notes
+                (
+                    id INTEGER PRIMARY KEY,
+                    title TEXT,
+                    content TEXT,
+                    x INTEGER DEFAULT 0,
+                    y INTEGER DEFAULT 0,
+                    w INTEGER DEFAULT 300,
+                    h INTEGER DEFAULT 300,
+                    color TEXT DEFAULT '{DEFAULT_COLOR}',
+                    deleted INTEGER DEFAULT 0,
+                    deleted_at TEXT,
+                    always_on_top INTEGER DEFAULT 0,
+                    is_open INTEGER DEFAULT 0,
+                    is_pinned INTEGER DEFAULT 0
+                )
+            """)
             # Migrations
             cur = self.conn.execute("PRAGMA table_info(notes)")
             columns = [row[1] for row in cur.fetchall()]
@@ -78,7 +78,7 @@ class NotesDB:
     def add(self, title: str = None, content: str = "",
             x: int = 300, y: int = 200,
             w: int = 260, h: int = 200,
-            color: str = "#FFF59D",
+            color: str = None,
             always_on_top: int = 0) -> int:
         """
         Adds a new note to the database.
@@ -89,7 +89,7 @@ class NotesDB:
             y (int, optional): Y-coordinate of the note window. Defaults to 200.
             w (int, optional): Width of the note window. Defaults to 260.
             h (int, optional): Height of the note window. Defaults to 200.
-            color (str, optional): Background color of the note. Defaults to "#FFF59D".
+            color (str, optional): Background color of the note. Defaults to "#000000".
             always_on_top (int, optional): Whether the note is always on top (0 or 1). Defaults to 0.
         Returns:
             int: The ID of the newly added note.
@@ -98,10 +98,14 @@ class NotesDB:
             cur = self.conn.execute("SELECT COUNT(*) FROM notes WHERE deleted = 0")
             count = cur.fetchone()[0]
             title = f"Sticker {count + 1}"
+        
+        if color is None:
+            color = DEFAULT_COLOR
+            
         with self.conn:
             cur = self.conn.execute(
                 "INSERT INTO notes(title, content, x, y, w, h, color, always_on_top) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (title, content, x, y, w, h, color, always_on_top)
             )
             return cur.lastrowid

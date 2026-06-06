@@ -11,6 +11,8 @@ import builtins
 if not hasattr(builtins, "_"):
     builtins._ = lambda s: s
 
+from config.colors import COLOR_PIN_BORDER
+
 class StickyUI:
     """
     A mixin for `StickyWindow` that handles the construction of the UI.
@@ -86,7 +88,10 @@ class StickyUI:
             b = Gtk.Button()
             b.set_size_request(btn_size, btn_size)
             cp = Gtk.CssProvider()
-            cp.load_from_data(f"button {{ background-color: {color}; border-radius: 50%; border: 1px solid rgba(0,0,0,0.2); }}".encode())
+            cp.load_from_data(
+                f"button {{ background-color: {color}; border-radius: 50%; "
+                f"border: 1px solid {COLOR_PIN_BORDER}; }}".encode()  # Merkezi sabit
+            )
             b.get_style_context().add_provider(cp, Gtk.STYLE_PROVIDER_PRIORITY_USER)
             b.connect("clicked", lambda _, c=color: (self.apply_color(c), popover.popdown()))
             grid.attach(b, i % 4, i // 4, 1, 1)

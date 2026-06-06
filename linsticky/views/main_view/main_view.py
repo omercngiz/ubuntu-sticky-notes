@@ -1,5 +1,6 @@
 import builtins
 from gi.repository import Gtk, Adw, Gio, Gdk, GLib
+from config.colors import DEFAULT_COLOR
 from views.main_view.note_card import NoteCard
 from sticky.sticky_window import StickyWindow
 from views.settings_view import SettingsView
@@ -178,7 +179,7 @@ class MainWindow(Adw.ApplicationWindow):
     def create_note(self):
         """Creates a new sticky note and opens it."""
         palette = self.config.get("palette", [])
-        default_color = palette[0] if palette else "#FFF59D"
+        default_color = palette[0] if palette else DEFAULT_COLOR
         note_id = self.db.add(color=default_color)
         self.refresh_list()
         self.open_note(note_id)

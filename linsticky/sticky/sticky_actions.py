@@ -8,6 +8,7 @@ into a JSON structure suitable for database storage.
 import json
 from gi.repository import Gtk, GLib, Pango, PangoCairo
 from .customization_dialog import CustomizationDialog
+from config.colors import DEFAULT_COLOR
 
 
 class StickyActions:
@@ -52,7 +53,7 @@ class StickyActions:
             self.buffer.set_text(content.replace("<br>", "\n"))
 
         # Restore window state.
-        self.apply_color(row["color"] or "#FFF59D")
+        self.apply_color(row["color"] or DEFAULT_COLOR)
         self.saved_width = row['w'] or 300
         self.saved_height = row['h'] or 380
         self.saved_x = row['x'] or 300
